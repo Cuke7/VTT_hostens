@@ -1,0 +1,53 @@
+@use "@material/theme" with (
+  $primary: #2288b4,
+  $secondary: #2a5b2f,
+  $background: #fff,
+);
+@use "material-components-web";
+
+@use '@material/button/mdc-button';
+@use '@material/button';
+
+@use "@material/icon-button";
+@use "@material/top-app-bar/mdc-top-app-bar";
+
+@use "@material/drawer/mdc-drawer";
+
+@include icon-button.core-styles;
+
+
+body {
+  margin: 0px;
+  background-color: #2a5b2f;
+}
+
+.mdc-drawer-app-content {
+  flex: auto;
+  overflow: auto;
+  position: relative;
+}
+
+.main-content {
+  overflow: auto;
+  height: 100%;
+}
+
+.app-bar {
+  position: absolute;
+}
+
+// only apply this style if below top app bar
+.mdc-top-app-bar {
+  z-index: 7;
+}
+
+#map {
+  /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
+  height: 200px;
+  width: 200px;
+  z-index: 0;
+}
+
+.mdc-drawer {
+  background-color: #4d7936;
+}
