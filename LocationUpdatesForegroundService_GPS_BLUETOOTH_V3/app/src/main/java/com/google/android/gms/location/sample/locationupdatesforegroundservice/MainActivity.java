@@ -40,6 +40,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements
     public void writeToFile(String data) {
         try
         {
-            File file = new File(getExternalFilesDir(null), "GPS data.txt");
+            File file = new File(getExternalFilesDir(null), "GPS_log.txt");
             if (!file.exists())
             {
                 file.createNewFile();
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 // Clear the text file
-                File file = new File(getExternalFilesDir(null), "GPS data.txt");
+                File file = new File(getExternalFilesDir(null), "GPS_log.txt");
                 Log.d(TAG,"FILE PATH: " + getExternalFilesDir(null));
                 try {
                     FileOutputStream fOut = null;
@@ -251,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements
                     osw.write("");
                     osw.flush();
                     osw.close();
+                    showToast("File cleared !");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -426,5 +428,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public void showToast(final String toast)
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

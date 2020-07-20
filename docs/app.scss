@@ -1,7 +1,7 @@
 @use "@material/theme" with (
   $primary: #2288b4,
   $secondary: #2a5b2f,
-  $background: #fff,
+  $background: rgb(96, 80, 238),
 );
 @use "material-components-web";
 
@@ -12,6 +12,12 @@
 @use "@material/top-app-bar/mdc-top-app-bar";
 
 @use "@material/drawer/mdc-drawer";
+
+@use "@material/card";
+
+@use "@material/snackbar/mdc-snackbar";
+
+@include card.core-styles;
 
 @include icon-button.core-styles;
 
@@ -50,4 +56,31 @@ body {
 
 .mdc-drawer {
   background-color: #4d7936;
+}
+
+.my-card-content {
+  padding: 16px;
+}
+
+.my_custom_card{
+  width: 35%;
+  position: absolute;
+  top: 96px;
+  right: 32px;
+}
+
+img{
+  width: 100%;
+}
+
+.hidden{
+  display: none;
+}
+
+input{
+  margin-top: 16px;
+}
+
+.mdc-drawer__content button{
+  margin-bottom: 16px;
 }

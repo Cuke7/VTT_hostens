@@ -4,14 +4,16 @@
 <title>🚴‍♂️ Bike app</title>
 
 <head>
-    <link rel="stylesheet" href="dist/bundle.css">
+    <link rel="stylesheet" href="bundle.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-        integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
+
+    <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
 </head>
 
-<body id = "container">
+<body id="container">
 
     <header class="mdc-top-app-bar" id="app-bar">
         <div class="mdc-top-app-bar__row">
@@ -21,19 +23,23 @@
                 <span class="mdc-top-app-bar__title">🚴‍♂️ Bike app</span>
             </section>
             <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-                <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
+                <button onclick="document.getElementById('file').click();"
+                    class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
+                    aria-label="Add">architecture</button>
+                <input id="file" type="file" style="display:none" />
+                <!-- <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
                     aria-label="Favorite">favorite</button>
                 <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
                     aria-label="Search">search</button>
                 <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
-                    aria-label="Options">more_vert</button>
+                    aria-label="Options">more_vert</button> -->
             </section>
         </div>
     </header>
 
     <aside class="mdc-drawer mdc-drawer--modal">
         <div class="mdc-drawer__content" style="padding: 16px; padding-top: 80px;">
-            <button class="foo-button mdc-button mdc-button--raised">
+            <button onClick="" class="foo-button mdc-button mdc-button--raised">
                 <div class="mdc-button__ripple"></div>
                 <span class="mdc-button__label">Button</span>
             </button>
@@ -43,15 +49,50 @@
     <div class="mdc-drawer-scrim"></div>
     <div id="main-content" style="padding: 16px; padding-top: 80px;">
         <div id="map"></div>
+        <div class="mdc-card my_custom_card" id="my_info_card">
+            <div class="mdc-card__primary-action">
+                <div class="my-card__media mdc-card__media mdc-card__media--16-9">
+                    <div class="mdc-card__media-content">
+                        <img src="pics/1.jpg" id="my_card_image"></img>
+                    </div>
+                </div>
+                <!-- ... additional primary action content ... -->
+            </div>
+            <div class="mdc-card__actions">
+                <div class="mdc-card__action-buttons">
+                    <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Add</span>
+                    </button>
+                    <button class="mdc-button mdc-card__action mdc-card__action--button">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Remove</span>
+                    </button>
+                </div>
+                <div class="mdc-card__action-icons">
+                    <!-- <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon"
+                        title="Share">share</button> -->
+                    <button onClick="hide_card()"
+                        class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon"
+                        title="More options">close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="mdc-snackbar mdc-snackbar--leading">
+        <div class="mdc-snackbar__surface">
+            <div class="mdc-snackbar__label" role="status" aria-live="polite" id="current_route_info">
+            </div>
+        </div>
+    </div>
 
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-        integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
 
-    <script src="dist/bundle.js" async></script>
-
+    <script src="bundle.js" async></script>
+    <script src="point_interets.js"></script>
     <script src="script.js"></script>
 </body>
 
