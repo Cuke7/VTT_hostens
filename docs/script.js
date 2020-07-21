@@ -15,6 +15,9 @@ let card_image = document.getElementById('my_card_image')
 // Contient tout les point d'intérêts
 var markers = new L.FeatureGroup();
 
+// Contient les points d'intérêts sélectionnés comme points de passage
+let points_passages = [];
+
 // TEMP
 let geojson_layer = L.geoJSON([], {
     style: function (feature) {
@@ -94,9 +97,7 @@ function show_point_interet() {
 function click_marker(e) {
 
     //reset all icons back to normal
-    for (const marker of markers.getLayers()) {
-        marker.setIcon(blue_pin);
-    }
+    clean_markers();
 
     show_card();
     let img_url = this.options.point_interet.img;
@@ -108,12 +109,19 @@ function click_marker(e) {
     this.setIcon(red_pin);
 }
 
+function clean_markers() {
+    for (const marker of markers.getLayers()) {
+        marker.setIcon(blue_pin);
+    }
+}
+
 function show_card() {
     info_card.classList.remove("hidden");
 }
 
 function hide_card() {
     info_card.classList.add("hidden");
+    clean_markers();
 }
 
 function show_snack(text) {
@@ -306,4 +314,14 @@ function moyenne() {
 
         geojson_layer.addData(ouput);
     }
+}
+
+function clear_map() {
+    geojson_layer.clearLayers();
+    show_snack('Map cleared')
+}
+
+
+function add_point_passage() {
+    points_passages.push(selected_point_interet);
 }

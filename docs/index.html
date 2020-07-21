@@ -23,11 +23,13 @@
                 <span class="mdc-top-app-bar__title">🚴‍♂️ Bike app</span>
             </section>
             <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                <button onclick="clear_map()" class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
+                    aria-label="Add">layers_clear</button>
                 <button onclick="moyenne()" class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
-                    aria-label="Add">analytics</button>
+                    aria-label="Add">architecture</button>
                 <button onclick="document.getElementById('file').click();"
                     class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
-                    aria-label="Add">architecture</button>
+                    aria-label="Add">add</button>
                 <input id="file" type="file" style="display:none" multiple />
                 <!-- <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
                     aria-label="Favorite">favorite</button>
@@ -62,7 +64,7 @@
             </div>
             <div class="mdc-card__actions">
                 <div class="mdc-card__action-buttons">
-                    <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
+                    <button onClick="add_point_passage()" class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised">
                         <div class="mdc-button__ripple"></div>
                         <span class="mdc-button__label">Add</span>
                     </button>
