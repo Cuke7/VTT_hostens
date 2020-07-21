@@ -3,9 +3,6 @@ let macarte;
 // Index of current selected point d'interêt
 let selected_point_interet;
 
-// Points de passage ajoutés à la route en création
-let points_passage = [];
-
 // Skack bar text element
 let snackbar_text = document.getElementById('current_route_info');
 
@@ -19,7 +16,18 @@ let card_image = document.getElementById('my_card_image')
 var markers = new L.FeatureGroup();
 
 // TEMP
-var geojson_layer = L.geoJSON();
+let geojson_layer = L.geoJSON([], {
+    style: function (feature) {
+        switch (feature.geometry.type) {
+            case "LineString": return { color: "#ff0000" };
+            case "LineString": return { color: "#0000ff" };
+        }
+    }
+});
+let geojson_features = [];
+
+// Contient geojson_features correctement moyenné
+let geojson_data = [];
 
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -31,11 +39,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     document.getElementById('file').addEventListener('change', handleFileSelect, false);
 
-    // Affiche le premier marker qui est sélectionné d'office en rouge
-    markers.getLayers()[0].setIcon(red_pin);
-
     // TEMP
     geojson_layer.addTo(macarte);
+
+    hide_card();
 });
 
 // Initialise et affiche la carte
@@ -49,8 +56,8 @@ function initMap() {
 
     // Hostens <3
 
-    var lat = 44.501758;
-    var lon = -0.641500;
+    var lat = 44.500699;
+    var lon = -0.647950;
 
     macarte = L.map('map').setView([lat, lon], 15);
 
@@ -116,46 +123,107 @@ function show_snack(text) {
 
 function handleFileSelect(evt) {
 
-    var geojsonFeature_upload = {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-            "type": "LineString",
-            "coordinates": []
-        }
-    };
+    var files = evt.target.files; // FileList object
 
-    let tab = [];
-    var file = evt.target.files; // FileList object
-    var selectedFile = document.getElementById('file').files[0];
-    console.log(selectedFile);
-    var reader = new FileReader();
+    let readers = [];
 
-    reader.onload = function (event) {
+    for (const selectedFile of files) {
+        readers.push(new FileReader());
+    }
 
-        let temp = reader.result.split("\n");
-        for (var i = 0; i < temp.length; i++) {
-            tab.push(temp[i].split(","));
-        }
+    for (const reader of readers) {
+        reader.onload = function (event) {
 
-        // Last line doesn't contain info
-        tab.pop();
-        for (const line of tab) {
-            if (!isNaN(line[1]) && !isNaN(line[0])) {
-                let temp = [Number(line[1].trim()), Number(line[0].trim())];
-                geojsonFeature_upload.geometry.coordinates.push(temp)
+            var geojsonFeature_upload = {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": []
+                }
+            };
+            let tab = [];
+
+            let temp = reader.result.split("\n");
+            for (var i = 0; i < temp.length; i++) {
+                tab.push(temp[i].split(","));
             }
-        }
-        geojson_layer.clearLayers();
-        drawer.open = false;
-        geojson_layer.addData(geojsonFeature_upload);
-        show_snack("Data loaded");
-        analyse(geojsonFeature_upload);
-    };
-    reader.readAsText(selectedFile);
+
+            // Last line doesn't contain info
+            tab.pop();
+            for (const line of tab) {
+                if (!isNaN(line[1]) && !isNaN(line[0])) {
+                    let temp = [Number(line[1].trim()), Number(line[0].trim())];
+                    geojsonFeature_upload.geometry.coordinates.push(temp)
+                }
+            }
+            //geojson_layer.clearLayers();
+            drawer.open = false;
+            geojson_layer.addData(geojsonFeature_upload);
+            show_snack("Data loaded");
+            let results = analyse(geojsonFeature_upload).sort((a, b) => (a.last_index > b.last_index) ? 1 : ((b.last_index > a.last_index) ? -1 : 0));
+            console.table(results);
+
+            let coords = geojsonFeature_upload.geometry.coordinates;
+
+            for (let i = 1; i < results.length; i++) {
+                let pair = [results[i - 1].start, results[i].start];
+                let temp = [];
+                if (pair[1] < pair[0]) {
+                    let temp2 = pair[0];
+                    pair[0] = pair[1];
+                    pair[1] = temp2;
+                    for (let index = results[i].last_index; index > results[i - 1].last_index; index--) {
+                        temp.push(coords[index]);
+                    }
+                } else {
+                    for (let index = results[i - 1].last_index; index < results[i].last_index; index++) {
+                        temp.push(coords[index]);
+                    }
+                }
+
+                let pushed = false;
+
+                for (const geojson_feature of geojson_features) {
+                    if (geojson_feature.properties.start == pair[0] && geojson_feature.properties.end == pair[1]) {
+                        pushed = true;
+                        geojson_feature.geometry.coordinates.push(temp);
+                    }
+                }
+
+                if (!pushed) {
+                    geojson_features.push({
+                        "type": "Feature",
+                        "properties": {
+                            "start": pair[0],
+                            "end": pair[1],
+                        },
+                        "geometry": {
+                            "type": "MultiLineString",
+                            "coordinates": [temp],
+                        }
+                    })
+                }
+
+            }
+
+            geojson_layer.clearLayers();
+            for (const geojson of geojson_features) {
+                geojson_layer.addData(geojson);
+            }
+
+        };
+    }
+
+    for (let i = 0; i < files.length; i++) {
+        readers[i].readAsText(files[i]);
+    }
+
+    document.getElementById('file').value = "";
 }
 
 function analyse(geojsonFeature_upload) {
+    let results = [];
     for (const point_interet of point_interets) {
         let dist = 100000000;
         last_index = 0;
@@ -168,11 +236,74 @@ function analyse(geojsonFeature_upload) {
         }
         // Si on passe à moins de 15 m du point d'intérêt
         if (dist < 20) {
-            console.log(point_interet.index + " -> " + last_index + " : " + dist)
+            results.push({
+                start: point_interet.index,
+                last_index: last_index,
+            })
         }
     }
+    return results;
 }
 
+function saveText(text, filename) {
+    var a = document.createElement('a');
+    a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    a.setAttribute('download', filename);
+    a.click()
+}
 
-function create_data_file() {
+//var obj = { a: "Hello", b: "World" };
+//saveText(JSON.stringify(obj), "filename.json");
+
+
+function moyenne() {
+
+    for (const geojson_feature of geojson_features) {
+
+        let temp_geojson_array = [];
+
+        for (const coords of geojson_feature.geometry.coordinates) {
+            temp_geojson_array.push({
+                "type": "Feature",
+                "properties": {
+                    "start": geojson_feature.properties.start,
+                    "end": geojson_feature.properties.end,
+                },
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": coords,
+                }
+            })
+        }
+
+        let lengths = temp_geojson_array.map(geojson => turf.length(geojson));
+
+        let ouput = {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [],
+            }
+        }
+
+        for (let i = 1; i < 1001; i++) {
+
+            let ps = [];
+
+            for (let index = 0; index < temp_geojson_array.length; index++) {
+                ps.push(turf.along(temp_geojson_array[index], i / 1000 * lengths[index]));
+            }
+            let p_moy = turf.center(turf.featureCollection(ps));
+            ouput.geometry.coordinates.push(p_moy.geometry.coordinates);
+        }
+
+        var myStyle = {
+            "color": "#ff7800",
+            "weight": 5,
+            "opacity": 0.65
+        };
+
+        geojson_layer.addData(ouput);
+    }
 }

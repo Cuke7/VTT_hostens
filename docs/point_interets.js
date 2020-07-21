@@ -82,5 +82,11 @@ let point_interets = [
         name: "",
         pos: [44.501758, -0.641500],
         img: "6.jpg",
+    },
+    {
+        index: "7",
+        name: "",
+        pos: [44.504308, -0.642314],
+        img: "7.jpg",
     }
 ]

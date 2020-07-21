@@ -4,7 +4,7 @@
 <title>🚴‍♂️ Bike app</title>
 
 <head>
-    <link rel="stylesheet" href="bundle.css">
+    <link rel="stylesheet" href="dist/bundle.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
@@ -23,10 +23,12 @@
                 <span class="mdc-top-app-bar__title">🚴‍♂️ Bike app</span>
             </section>
             <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                <button onclick="moyenne()" class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
+                    aria-label="Add">analytics</button>
                 <button onclick="document.getElementById('file').click();"
                     class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
                     aria-label="Add">architecture</button>
-                <input id="file" type="file" style="display:none" />
+                <input id="file" type="file" style="display:none" multiple />
                 <!-- <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
                     aria-label="Favorite">favorite</button>
                 <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button"
@@ -91,7 +93,7 @@
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
 
-    <script src="bundle.js" async></script>
+    <script src="dist/bundle.js" async></script>
     <script src="point_interets.js"></script>
     <script src="script.js"></script>
 </body>
