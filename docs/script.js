@@ -58,9 +58,8 @@ function initMap() {
     document.getElementById('map').style.width = vw - 32 + "px"
 
     // Hostens <3
-
-    var lat = 44.500699;
-    var lon = -0.647950;
+    var lat = 44.501060;
+    var lon = -0.637508;
 
     macarte = L.map('map').setView([lat, lon], 15);
 
@@ -242,8 +241,8 @@ function analyse(geojsonFeature_upload) {
                 last_index = i
             }
         }
-        // Si on passe à moins de 15 m du point d'intérêt
-        if (dist < 20) {
+        // Si on passe à moins de 25 m du point d'intérêt
+        if (dist < 25) {
             results.push({
                 start: point_interet.index,
                 last_index: last_index,
@@ -295,7 +294,7 @@ function moyenne() {
             }
         }
 
-        for (let i = 1; i < 1001; i++) {
+        for (let i = 1; i < 1000; i++) {
 
             let ps = [];
 

@@ -79,7 +79,7 @@ let point_interets = [
     },
     {
         index: "6",
-        name: "",
+        name: "🐢",
         pos: [44.501758, -0.641500],
         img: "6.jpg",
     },
@@ -88,5 +88,38 @@ let point_interets = [
         name: "",
         pos: [44.504308, -0.642314],
         img: "7.jpg",
+    },
+    {
+        index: "8",
+        name: "",
+        pos: [44.504044, -0.646441],
+        img: "8.jpg",
+    }, {
+        index: "9",
+        name: "",
+        pos: [44.507534, -0.641126],
+        img: "8.jpg",
+    }, {
+        index: "10",
+        name: "",
+        pos: [44.506282, -0.634244],
+        img: "8.jpg"
+    }, {
+        index: "11",
+        name: "",
+        pos: [44.497013, -0.616274],
+        img: "8.jpg"
+    },{
+        index: "12",
+        name: " ",
+        pos: [44.494546, -0.628907],
+        img: "8.jpg"
+    },{
+        index: "13",
+        name: " ",
+        pos: [44.494941, -0.636682],
+        img: "8.jpg"
     }
+
+    
 ]
